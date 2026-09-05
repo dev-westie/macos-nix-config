@@ -1,0 +1,33 @@
+#!/bin/bash
+set -e
+
+CONFIG_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+cd "$CONFIG_DIR"
+
+echo "==> Updating flake inputs..."
+nix flake update
+
+echo "==> Checking that the config builds before touching anything live..."
+if ! sudo darwin-rebuild check --flake .#M2Mac; then
+  echo "!! Build check failed -- nothing was applied. Fix the error above and re-run."
+  exit 1
+fi
+
+echo "==> Updating Homebrew..."
+brew update
+brew upgrade
+
+echo
+read -r -p "Build succeeded. Apply it now? [y/N] " confirm
+if [[ "$confirm" != "y" && "$confirm" != "Y" ]]; then
+  echo "Skipped. Run 'sudo darwin-rebuild switch --flake .#M2Mac' manually when you're ready."
+  exit 0
+fi
+
+echo "==> Applying config..."
+sudo darwin-rebuild switch --flake .#M2Mac
+
+echo "==> Cleaning up old generations..."
+nix-collect-garbage -d
+
+echo "==> Done."

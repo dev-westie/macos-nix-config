@@ -1,0 +1,17 @@
+#!/bin/bash
+# Manual cleanup, for whenever you want to reclaim disk space right now
+# instead of waiting for the weekly automatic garbage collection
+# (see darwin/default.nix -- launchd.daemons.nix-gc).
+set -e
+
+echo "==> Removing old Nix generations and unreferenced store paths..."
+nix-collect-garbage -d
+
+echo "==> Deduplicating the Nix store..."
+nix store optimise
+
+echo "==> Cleaning up Homebrew..."
+brew cleanup --prune=all
+
+echo "==> Done."
+df -h / | tail -n 1
