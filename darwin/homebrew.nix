@@ -9,17 +9,12 @@
       cleanup = "zap"; # removes anything installed manually that isn't listed below
     };
 
-    caskArgs.no_quarantine = true;
-    global.brewfile = true;
-
     casks = [
       "Ghostty"
       "librewolf"
       "maccy"
       "protonvpn"
       "spotify"
-      "brave-browser"
-      "mullvad-browser"
       "raycast"
       "vlc"
       "whatsapp"
@@ -28,7 +23,6 @@
       "roblox"
       "prismlauncher"
       "shottr"
-      "musicbrainz-picard"
       "free-download-manager"
     ];
 
@@ -42,6 +36,7 @@
     # Format: "App Name" = <numeric App Store ID>;
     # Find an ID with: mas search "app name"
     masApps = { };
+    #ADD MAS TO HOME
 
     taps = [ ];
   };
