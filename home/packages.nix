@@ -25,7 +25,6 @@
     exiftool
     ffmpeg
     flac
-    spicetify-cli
     yt-dlp
   ];
 }

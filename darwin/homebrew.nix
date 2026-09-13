@@ -6,7 +6,7 @@
     onActivation = {
       autoUpdate = false;
       upgrade = true;
-      cleanup = "zap"; # removes anything installed manually that isn't listed below
+      cleanup = "zap";
     };
 
     casks = [
@@ -19,11 +19,10 @@
       "vlc"
       "whatsapp"
       "legcord"
-      "gimp"
       "roblox"
-      "prismlauncher"
       "shottr"
       "free-download-manager"
+      "crmne/tap/fastpotify"
     ];
 
     brews = [
@@ -38,6 +37,8 @@
     masApps = { };
     #ADD MAS TO HOME
 
-    taps = [ ];
+    taps = [
+      "crmne/tap"
+    ];
   };
 }

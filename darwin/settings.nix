@@ -27,7 +27,6 @@
         AppleShowAllExtensions = true; # show all file extensions
         _FXShowPosixPathInTitle = true; # show full path in title bar
         ShowPathbar = true; # breadcrumb nav at bottom
-        ShowStatusBar = true; # file count & disk space
         FXPreferredViewStyle = "clmv"; # default to column view
         FXEnableExtensionChangeWarning = false;
         QuitMenuItem = true; # allow quitting Finder with Cmd+Q
@@ -46,7 +45,7 @@
         KeyRepeat = 2; # fast key repeat rate
         InitialKeyRepeat = 15; # short delay before repeat starts
         "com.apple.trackpad.scaling" = 0.4;
-        "com.apple.swipescrolldirection" = true; # natural scrolling (finger up = content scrolls down)
+        "com.apple.swipescrolldirection" = true; # natural scrolling
       };
 
       LaunchServices.LSQuarantine = false; # skip "downloaded from internet" warnings
@@ -84,7 +83,7 @@
       softwareupdate --install-rosetta --agree-to-license
     fi
 
-    # NOTE: Xcode Command Line Tools are installed manually after each reset --
+    # NOTE: Xcode Command Line Tools are installed manually --
     # run `xcode-select --install` yourself, this config doesn't automate it.
 
     USER_UID=$(id -u ${primaryUser})
