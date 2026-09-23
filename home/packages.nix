@@ -7,12 +7,8 @@
 
     # Terminal Utilities
     curl
-    neovim # provides the `nvim` binary
+    neovim
     tree
-    # NOTE: zoxide is installed but does nothing until it's hooked into your
-    # shell config (e.g. `eval "$(zoxide init zsh)"`, or home-manager's
-    # `programs.zoxide.enableZshIntegration = true`). Deferred until the
-    # shell/terminal rework.
     zoxide
     eza
     fd
@@ -20,6 +16,13 @@
     ripgrep
     yazi
     bat
+   
+    # Programming Languages & Toolchains
+    python3
+    uv
+    nodejs
+    rustc
+    cargo
 
     # Media, Audio & Metadata Tools
     exiftool
