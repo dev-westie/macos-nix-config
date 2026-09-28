@@ -1,10 +1,4 @@
-{
-  pkgs,
-  inputs,
-  self,
-  primaryUser,
-  ...
-}:
+{ inputs, primaryUser, ... }:
 {
   imports = [
     ./homebrew.nix
@@ -13,54 +7,25 @@
     inputs.nix-homebrew.darwinModules.nix-homebrew
   ];
 
-  # Nix configuration
-  nix = {
-    settings = {
-      experimental-features = [
-        "nix-command"
-        "flakes"
-      ];
-    };
-    enable = false; # using Determinate Installer
-  };
+  # Nix is managed by the Determinate installer, not nix-darwin.
+  nix.enable = false;
 
-  nixpkgs.config.allowUnfree = true;
-
-  # Tells nix-darwin which account is "the" user of this machine --
-  # needed for some user-scoped system settings/activation steps.
+  # Which account is "the" user of this machine.
   system.primaryUser = primaryUser;
 
-  # Declarative Homebrew management
   nix-homebrew = {
-    user = primaryUser;
     enable = true;
-    autoMigrate = true;
+    user = primaryUser;
+    autoMigrate = true; # adopts a pre-existing Homebrew install; harmless otherwise
   };
 
-  # Home Manager integration
   home-manager = {
     useGlobalPkgs = true;
     useUserPackages = true;
-    users.${primaryUser} = {
-      imports = [
-        ../home
-      ];
-    };
-    extraSpecialArgs = {
-      inherit inputs self primaryUser;
-    };
+    backupFileExtension = "backup"; # existing files get renamed instead of failing
+    users.${primaryUser}.imports = [ ../home ];
+    extraSpecialArgs = { inherit primaryUser; };
   };
 
-  # User configuration
-  users.users.${primaryUser} = {
-    home = "/Users/${primaryUser}";
-    shell = pkgs.zsh;
-  };
-
-  environment = {
-    systemPath = [
-      "/opt/homebrew/bin"
-    ];
-    pathsToLink = [ "/Applications" ];
-  };
+  users.users.${primaryUser}.home = "/Users/${primaryUser}";
 }

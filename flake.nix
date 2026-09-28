@@ -1,5 +1,6 @@
 {
   description = "My system configuration";
+
   inputs = {
     # monorepo w/ recipes ("derivations")
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
@@ -21,8 +22,6 @@
       self,
       darwin,
       nixpkgs,
-      home-manager,
-      nix-homebrew,
       ...
     }@inputs:
     let
@@ -30,16 +29,14 @@
       primaryUser = "westie";
     in
     {
-      # build with:
-      # $ sudo darwin-rebuild switch --flake .#MacBook
+      # sudo darwin-rebuild switch --flake .#MacBook   (or: just switch)
       darwinConfigurations.MacBook = darwin.lib.darwinSystem {
         system = "aarch64-darwin";
-        modules = [
-          ./darwin
-        ];
-        specialArgs = {
-          inherit inputs self primaryUser;
-        };
+        modules = [ ./darwin ];
+        specialArgs = { inherit inputs self primaryUser; };
       };
+
+      # makes `nix fmt` work
+      formatter.aarch64-darwin = nixpkgs.legacyPackages.aarch64-darwin.nixfmt-tree;
     };
 }

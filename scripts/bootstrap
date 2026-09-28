@@ -1,17 +1,14 @@
 #!/bin/bash
-# First-time setup on a fresh Mac. Assumes this repo has ALREADY been cloned
-# to ~/.config/nix by hand (it's a private repo, so that first clone needs
-# your own GitHub auth -- either an SSH key or `git clone` with a personal
-# access token when prompted for a password. This script can't do that step
-# for you). See README.md for the full first-time sequence.
-set -e
+# First-time setup on a fresh Mac. The repo must already be cloned to
+# ~/.config/nix (private repo, so that step needs your own auth). See README.md.
+set -euo pipefail
 
 cd "$(dirname "${BASH_SOURCE[0]}")/.."
 
-echo "==> Checking for Xcode Command Line Tools (needed for git/compilers)..."
+echo "==> Checking for Xcode Command Line Tools..."
 if ! xcode-select -p >/dev/null 2>&1; then
   echo "!! Command Line Tools not found."
-  echo "   Run 'xcode-select --install', finish the popup that appears, then re-run this script."
+  echo "   Run 'xcode-select --install', finish the popup, then re-run this script."
   exit 1
 fi
 
@@ -19,20 +16,19 @@ echo "==> Checking for Nix..."
 if ! command -v nix >/dev/null 2>&1; then
   echo "Installing Nix (Determinate installer)..."
   curl --proto '=https' --tlsv1.2 -sSf -L https://install.determinate.systems/nix | sh -s -- install
-  echo
-  echo "Nix is installed. Open a NEW terminal window (so your shell picks up"
-  echo "the updated PATH), then re-run this script to continue."
-  exit 0
+fi
+# Make nix available in this shell without opening a new terminal.
+if ! command -v nix >/dev/null 2>&1; then
+  # shellcheck disable=SC1091
+  . /nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh
 fi
 
 echo "==> Applying configuration..."
 if command -v darwin-rebuild >/dev/null 2>&1; then
   sudo darwin-rebuild switch --flake .#MacBook
 else
-  # First-ever run on this machine: darwin-rebuild itself doesn't exist yet
-  # until nix-darwin has been applied once.
-  echo "First-time nix-darwin bootstrap..."
-  sudo nix run nix-darwin -- switch --flake .#MacBook
+  # darwin-rebuild doesn't exist until nix-darwin has been applied once.
+  sudo nix run github:lnl7/nix-darwin#darwin-rebuild -- switch --flake .#MacBook
 fi
 
-echo "==> Done. Restart your terminal to pick up all changes."
+echo "==> Done. Open a new terminal to pick up all changes."

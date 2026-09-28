@@ -5,12 +5,12 @@
 
     onActivation = {
       autoUpdate = false;
-      upgrade = true;
-      cleanup = "zap";
+      upgrade = false; # upgrades happen only via `just brew-upgrade`
+      cleanup = "zap"; # intentional: removing a cask also deletes its leftover data
     };
 
     casks = [
-      "Ghostty"
+      "ghostty"
       "librewolf"
       "maccy"
       "protonvpn"
@@ -20,7 +20,7 @@
       "roblox"
       "shottr"
       "steam"
-      "IINA"
+      "iina"
       "prismlauncher"
       "crmne/tap/spotifast"
     ];

@@ -1,146 +1,100 @@
 # nix-config
 
-macOS system config for `MacBook`, using nix-darwin + home-manager + declarative Homebrew.
-Single machine, single user (`westie`), rebuilt from scratch periodically.
+macOS system config for `MacBook` using nix-darwin + home-manager + declarative
+Homebrew. Single machine, single user (`westie`), rebuilt from scratch periodically.
 
 ## Stack
 
-- **nix-darwin** — macOS system settings, defaults, activation scripts
-- **home-manager** — user-level packages (git, CLI tools)
-- **Homebrew** (via `nix-homebrew`) — GUI apps (casks) and a couple of CLI tools not
-  cleanly packaged in nixpkgs (`mole`, `mas`)
+- **nix-darwin**: macOS settings, defaults, activation scripts
+- **home-manager**: user-level packages and git config
+- **Homebrew** (via `nix-homebrew`): GUI apps (casks) and CLI tools not cleanly
+  packaged in nixpkgs (`mole`)
 - **nixpkgs-unstable** as the package source
 
-Rule of thumb: CLI tools → Nix (`home/packages.nix`). GUI apps → Homebrew casks
-(`darwin/homebrew.nix`). App Store apps → `darwin/homebrew.nix`'s `masApps`.
+Rule of thumb: CLI tools go in `home/packages.nix`. GUI apps go in
+`darwin/homebrew.nix` as casks.
 
 ## Layout
 
     .
-    ├── flake.nix                       # inputs + darwinConfigurations output
+    ├── flake.nix              inputs, darwinConfigurations, formatter
     ├── flake.lock
+    ├── Justfile               everyday commands (run `just`)
     ├── darwin/
-    │   ├── default.nix                 # top-level darwin config and Nix settings
-    │   ├── settings.nix                # macOS defaults + activation scripts
-    │   └── homebrew.nix                # casks + brews + masApps
+    │   ├── default.nix        top-level darwin config, home-manager wiring
+    │   ├── settings.nix       macOS defaults, Software Update, Gatekeeper, Rosetta
+    │   └── homebrew.nix       casks + brews + taps
     ├── home/
-    │   ├── default.nix                 # home-manager entrypoint
+    │   ├── default.nix
     │   ├── git.nix
     │   └── packages.nix
     └── scripts/
-        ├── bootstrap                   # first-time setup on a fresh Mac
-        ├── update                      # flake update -> check -> confirm -> switch -> gc
-        ├── clean                       # on-demand disk cleanup
-        └── unquarantine <path>         # strip quarantine flag from one app immediately
+        └── bootstrap          first-time setup on a fresh Mac
 
 ## Everyday commands
 
-Apply changes:
+Always edit the config and run `just switch`, even for a single package. Nix only
+rebuilds what changed. Installing things by hand (`brew install`, `nix profile
+install`) puts software on the machine that the config does not know about, and
+`zap` cleanup can later delete it. New files must be `git add`ed before building
+(flakes ignore untracked files).
 
-    sudo darwin-rebuild switch --flake .#MacBook
+| Recipe | What it does | Manual equivalent |
+|---|---|---|
+| `just switch` | Apply the config | `sudo darwin-rebuild switch --flake .#MacBook` |
+| `just test` | Build only. Validates without changing anything | `darwin-rebuild build --flake .#MacBook` |
+| `just update` | Update inputs, build, confirm, switch. Restores `flake.lock` on failure or "no" | `nix flake update`, then build, then switch |
+| `just brew-upgrade` | Upgrade Homebrew apps. The only place brew upgrades happen | `brew update && brew upgrade` |
+| `just generations` | List saved system generations | `darwin-rebuild --list-generations` |
+| `just rollback` | Go back one generation | `sudo darwin-rebuild switch --rollback` |
+| `just fmt` | Format all `.nix` files | `nix fmt` |
+| `just clean` | Full maintenance (below) | see below |
 
-Check before applying (won't touch the live system):
+### `just clean`
 
-    nix flake check
-    sudo darwin-rebuild check --flake .#MacBook
+    sudo nix-collect-garbage -d     # system generations + unreferenced store paths
+    nix-collect-garbage -d          # your user profiles
+    nix store optimise              # deduplicate the store
+    brew autoremove                 # orphaned dependencies
+    brew cleanup --prune=all        # old downloads and versions
 
-Update everything (flake inputs + Homebrew), with a safety check and a
-confirmation prompt before it actually applies anything:
-
-    ./scripts/update
-
-Free up disk space on demand:
-
-    ./scripts/clean
-
-Just downloaded something that says "app is damaged" or "unidentified developer"?
-
-    ./scripts/unquarantine "/Applications/SomeApp.app"
-
-(Everything already in `/Applications` also gets this automatically on every
-rebuild — this script is only for the moment right after a fresh download,
-before your next rebuild.)
-
-Rollback:
-
-    darwin-rebuild --list-generations
-    sudo darwin-rebuild switch --rollback
+**This deletes every old generation, with no 14-day window.** After `just clean`
+you can only roll back to the current generation. There is no scheduled GC in
+this config, so `just clean` is the only thing that reclaims space.
 
 ## First-time setup on a freshly reset Mac
 
-This repo is private, so the very first clone needs your own GitHub auth —
-there's no way to script around that chicken-and-egg problem on a truly blank
-machine (no SSH key exists yet on a fresh install).
+1. Sign in to iCloud / the App Store.
+2. Restore your SSH key so you can clone a private repo.
+3. Run `xcode-select --install` and finish the popup (deliberately not automated).
+4. Clone: `git clone git@github.com:<you>/<repo>.git ~/.config/nix`
+5. `cd ~/.config/nix && ./scripts/bootstrap`
 
-1. Sign in to iCloud / the App Store (needed later for any `masApps`).
-2. Restore your SSH key (from a password manager, iCloud Keychain, or backup)
-   so you can clone a private repo.
-3. Run `xcode-select --install` yourself and finish the popup. **This is not
-   automated on purpose** — see "Deliberately NOT automated" below.
-4. Clone this repo to `~/.config/nix`:
+`just` is installed by the config, so the first apply uses the bootstrap script.
 
-       git clone git@github.com:<you>/<repo>.git ~/.config/nix
+## Deliberate choices
 
-5. Run the bootstrap script, which installs Nix if needed and applies the
-   config for the first time:
-
-       cd ~/.config/nix
-       ./scripts/bootstrap
-
-## Deliberately NOT automated
-
-- **Xcode Command Line Tools** — installed by hand (`xcode-select --install`)
-  every reset. A fully headless install exists as an unofficial trick but was
-  intentionally left out to avoid a silent no-op if Apple changes the
-  underlying package name in a future macOS release.
-- **SIP (`csrutil`) changes** — Apple only allows `csrutil` to run from
-  Recovery Mode, specifically so no script (including this one) can weaken
-  System Integrity Protection unattended. If you ever need this again: reboot
-  into Recovery (hold the power button on boot → Options), open Terminal from
-  the Utilities menu, run the `csrutil` command there, reboot.
-- **LibreWolf configuration** — installed as a cask, but its settings/profile
-  are not managed declaratively. `programs.firefox` (pointed at the LibreWolf
-  package) could do this later if wanted.
-- **Shell/terminal config** — not touched at all in this config on purpose;
-  being reworked separately. `zoxide` is installed but inert until a
-  shell-init line is added later.
-
-## Notes
-
-- `nix.enable = false` — Nix itself is managed by the Determinate installer, not nix-darwin.
-- Gatekeeper is fully disabled and quarantine flags are stripped from every
-  app in `/Applications` and `~/Applications` on every rebuild.
-- Rosetta 2 installs automatically on first rebuild (idempotent after that).
-- macOS software updates are fully manual — no auto-check, auto-download, or
-  auto-install. Currently pinned to Sequoia 15.8 on purpose.
-- Default screenshot and Spotlight keyboard shortcuts are disabled on every
-  rebuild to stay out of Raycast's way. The underlying hotkey IDs are
-  Apple's undocumented internal numbering — stable for now, but worth a
-  glance in System Settings → Keyboard → Keyboard Shortcuts if one doesn't
-  take effect after a macOS update.
-- Nix garbage collection runs automatically, weekly, deleting generations
-  older than 14 days, plus store deduplication on the same schedule.
+- **Software Update** (written by an activation script into the system domain): macOS version upgrades are manual, with
+  no auto-download or auto-install. Security data (XProtect, Security Responses)
+  and system files install automatically. Command Line Tools updates are handled
+  by hand: `softwareupdate --list`, then `sudo softwareupdate --install "<name>"`.
+- **Gatekeeper** is fully disabled system-wide. Activation runs
+  `spctl --master-disable` only when it is currently enabled.
+  `LSQuarantine` is also off.
+- **Homebrew `cleanup = "zap"`**: removing a cask also deletes its app data.
+- **Homebrew upgrades are never automatic.** Use `just brew-upgrade`.
+- **Keyboard shortcuts** are not managed. macOS defaults apply.
+- **Nix** is managed by the Determinate installer (`nix.enable = false`).
+- Rosetta 2 installs on the first rebuild (skipped if already present).
 - Touch ID for sudo is enabled.
+- Shell/terminal config is not managed. `zoxide`, `fzf`, `bat`, `eza` and `yazi`
+  are installed but need shell init added later.
+- LibreWolf settings are not managed declaratively.
 
 ## Adding software
 
-**GUI app** → `darwin/homebrew.nix`, add to `casks`. Find name: `brew search --cask <name>`
+- **GUI app**: add to `casks` in `darwin/homebrew.nix` (`brew search --cask <name>`)
+- **CLI tool in nixpkgs (preferred)**: add to `home/packages.nix`
+- **CLI tool not in nixpkgs**: add to `brews` in `darwin/homebrew.nix`
 
-**App Store app** → `darwin/homebrew.nix`, add to `masApps` as `"App Name" = <id>;`.
-Find ID: `mas search "app name"` (needs to be signed into the App Store app first)
-
-**CLI tool, not in nixpkgs** → `darwin/homebrew.nix`, add to `brews`.
-
-**CLI tool, in nixpkgs (preferred)** → `home/packages.nix`, add to `home.packages`.
-
-## Pushing this to git
-
-This directory isn't a git repo yet. When ready:
-
-    cd ~/.config/nix
-    git init
-    git add .
-    git commit -m "Initial config"
-    git branch -M main
-    git remote add origin git@github.com:<you>/<repo>.git
-    git push -u origin main
+Then run `just switch`.

@@ -3,6 +3,7 @@
   home.packages = with pkgs; [
     # Dev tools
     gh
+    just
 
     # Terminal Utilities
     curl
@@ -15,7 +16,7 @@
     ripgrep
     yazi
     bat
-   
+
     # Programming Languages & Toolchains
     python3
     uv

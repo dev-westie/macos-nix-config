@@ -3,7 +3,7 @@
   programs.git = {
     enable = true;
 
-    ignores = [ "**/.DS_STORE" ];
+    ignores = [ ".DS_Store" ];
 
     settings = {
       user.name = "westie";
