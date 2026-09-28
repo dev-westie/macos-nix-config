@@ -2,7 +2,6 @@
 {
   home.packages = with pkgs; [
     # Dev tools
-    git
     gh
 
     # Terminal Utilities

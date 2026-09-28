@@ -7,7 +7,7 @@
 
     settings = {
       user.name = "westie";
-      user.email = "westie.dev@proton.me"; # TODO: confirm this is the email on your GitHub account
+      user.email = "westie.dev@proton.me";
 
       github.user = primaryUser;
 

@@ -38,7 +38,6 @@
       };
 
       NSGlobalDomain = {
-        AppleShowAllExtensions = true;
         NSAutomaticSpellingCorrectionEnabled = false;
         NSAutomaticCapitalizationEnabled = false;
         NSAutomaticPeriodSubstitutionEnabled = false;
