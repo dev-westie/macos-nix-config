@@ -83,9 +83,6 @@
       softwareupdate --install-rosetta --agree-to-license
     fi
 
-    # NOTE: Xcode Command Line Tools are installed manually --
-    # run `xcode-select --install` yourself, this config doesn't automate it.
-
     USER_UID=$(id -u ${primaryUser})
 
     echo "Clearing pinned Dock items..."

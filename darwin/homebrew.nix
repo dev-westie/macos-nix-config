@@ -19,12 +19,14 @@
       "legcord"
       "roblox"
       "shottr"
+      "steam"
+      "IINA"
+      "prismlauncher"
       "crmne/tap/spotifast"
     ];
 
     brews = [
       "mole"
-      "mas"
     ];
 
     taps = [

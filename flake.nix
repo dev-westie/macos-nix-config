@@ -28,20 +28,17 @@
     let
       # change your macOS user account name here
       primaryUser = "westie";
-      # change your machine's hostname here (also see hosts/<hostname>/)
-      hostname = "M2Mac";
     in
     {
       # build with:
       # $ sudo darwin-rebuild switch --flake .#M2Mac
-      darwinConfigurations.${hostname} = darwin.lib.darwinSystem {
+      darwinConfigurations.M2Mac = darwin.lib.darwinSystem {
         system = "aarch64-darwin";
         modules = [
           ./darwin
-          ./hosts/${hostname}/configuration.nix
         ];
         specialArgs = {
-          inherit inputs self primaryUser hostname;
+          inherit inputs self primaryUser;
         };
       };
     };
