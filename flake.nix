@@ -31,8 +31,8 @@
     in
     {
       # build with:
-      # $ sudo darwin-rebuild switch --flake .#M2Mac
-      darwinConfigurations.M2Mac = darwin.lib.darwinSystem {
+      # $ sudo darwin-rebuild switch --flake .#MacBook
+      darwinConfigurations.MacBook = darwin.lib.darwinSystem {
         system = "aarch64-darwin";
         modules = [
           ./darwin

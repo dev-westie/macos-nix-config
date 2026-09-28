@@ -1,7 +1,5 @@
 #!/bin/bash
 # Manual cleanup, for whenever you want to reclaim disk space right now
-# instead of waiting for the weekly automatic garbage collection
-# (see darwin/default.nix -- launchd.daemons.nix-gc).
 set -e
 
 echo "==> Removing old Nix generations and unreferenced store paths..."

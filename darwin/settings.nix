@@ -3,6 +3,7 @@
   # touch ID for sudo
   security.pam.services.sudo_local.touchIdAuth = true;
 
+  networking.hostName = "MacBook";
   # system defaults and preferences
   system = {
     stateVersion = 6;

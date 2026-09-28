@@ -1,6 +1,6 @@
 # nix-config
 
-macOS system config for `M2Mac`, using nix-darwin + home-manager + declarative Homebrew.
+macOS system config for `MacBook`, using nix-darwin + home-manager + declarative Homebrew.
 Single machine, single user (`westie`), rebuilt from scratch periodically.
 
 ## Stack
@@ -19,11 +19,8 @@ Rule of thumb: CLI tools → Nix (`home/packages.nix`). GUI apps → Homebrew ca
     .
     ├── flake.nix                       # inputs + darwinConfigurations output
     ├── flake.lock
-    ├── hosts/
-    │   └── M2Mac/
-    │       └── configuration.nix       # hostname + LocalHostName activation script
     ├── darwin/
-    │   ├── default.nix                 # top-level darwin config, nix settings, GC schedule
+    │   ├── default.nix                 # top-level darwin config and Nix settings
     │   ├── settings.nix                # macOS defaults + activation scripts
     │   └── homebrew.nix                # casks + brews + masApps
     ├── home/
@@ -40,12 +37,12 @@ Rule of thumb: CLI tools → Nix (`home/packages.nix`). GUI apps → Homebrew ca
 
 Apply changes:
 
-    sudo darwin-rebuild switch --flake .#M2Mac
+    sudo darwin-rebuild switch --flake .#MacBook
 
 Check before applying (won't touch the live system):
 
     nix flake check
-    sudo darwin-rebuild check --flake .#M2Mac
+    sudo darwin-rebuild check --flake .#MacBook
 
 Update everything (flake inputs + Homebrew), with a safety check and a
 confirmation prompt before it actually applies anything:

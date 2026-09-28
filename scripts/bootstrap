@@ -27,12 +27,12 @@ fi
 
 echo "==> Applying configuration..."
 if command -v darwin-rebuild >/dev/null 2>&1; then
-  sudo darwin-rebuild switch --flake .#M2Mac
+  sudo darwin-rebuild switch --flake .#MacBook
 else
   # First-ever run on this machine: darwin-rebuild itself doesn't exist yet
   # until nix-darwin has been applied once.
   echo "First-time nix-darwin bootstrap..."
-  sudo nix run nix-darwin -- switch --flake .#M2Mac
+  sudo nix run nix-darwin -- switch --flake .#MacBook
 fi
 
 echo "==> Done. Restart your terminal to pick up all changes."
