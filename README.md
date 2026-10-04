@@ -27,7 +27,8 @@ Rule of thumb: CLI tools go in `home/packages.nix`. GUI apps go in
     ├── home/
     │   ├── default.nix
     │   ├── git.nix
-    │   └── packages.nix
+    │   ├── packages.nix
+    │   └── aria2.nix
     └── scripts/
         └── bootstrap          first-time setup on a fresh Mac
 
@@ -64,11 +65,9 @@ this config, so `just clean` is the only thing that reclaims space.
 
 ## First-time setup on a freshly reset Mac
 
-1. Sign in to iCloud / the App Store.
-2. Restore your SSH key so you can clone a private repo.
-3. Run `xcode-select --install` and finish the popup (deliberately not automated).
-4. Clone: `git clone git@github.com:<you>/<repo>.git ~/.config/nix`
-5. `cd ~/.config/nix && ./scripts/bootstrap`
+1. Run `xcode-select --install`
+2. Clone: `git clone https://github.com/dev-westie/macos-nix-config.git ~/.config/nix`
+3. `cd ~/.config/nix && ./scripts/bootstrap`
 
 `just` is installed by the config, so the first apply uses the bootstrap script.
 
@@ -98,3 +97,9 @@ this config, so `just clean` is the only thing that reclaims space.
 - **CLI tool not in nixpkgs**: add to `brews` in `darwin/homebrew.nix`
 
 Then run `just switch`.
+
+## AI Note
+
+From the commits: "Initial working config" `4f6e2b55ca7fb58a83aaf4ad891c02636f187338` to "Overhaul: settings, Justfile, README" `75b5c46d7487d3d633fea99015eed3837b80e32e` was almost entirely vibecoded with AI.
+Starting with the commit "add aria2 config" `caab48319177dda07e9d8312821aa373c8ad00d8`, I will be coding things myself and only using AI to learn, help, explain things, or review/debug when I am stuck or need help.
+
