@@ -8,11 +8,11 @@ default:
 
 # apply the config to the live system
 switch:
-    sudo darwin-rebuild switch --flake .#{{host}}
+    sudo darwin-rebuild switch --flake .#{{ host }}
 
 # build only: validates everything, changes nothing, needs no root
 test:
-    darwin-rebuild build --flake .#{{host}}
+    darwin-rebuild build --flake .#{{ host }}
     rm -f result
 
 # update flake inputs, build, confirm, then apply (restores flake.lock on failure/no)
@@ -21,12 +21,12 @@ update:
     set -euo pipefail
     trap 'git checkout -- flake.lock; echo "flake.lock restored"' ERR
     nix flake update
-    darwin-rebuild build --flake .#{{host}}
+    darwin-rebuild build --flake .#{{ host }}
     rm -f result
     trap - ERR
     read -r -p "Build OK. Apply now? [y/N] " ans
     if [[ "$ans" =~ ^[Yy]$ ]]; then
-        sudo darwin-rebuild switch --flake .#{{host}}
+        sudo darwin-rebuild switch --flake .#{{ host }}
     else
         git checkout -- flake.lock
         echo "Skipped. flake.lock restored."

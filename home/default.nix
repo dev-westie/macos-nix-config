@@ -4,6 +4,7 @@
     ./packages.nix
     ./git.nix
     ./aria2.nix
+    ./zoxide.nix
   ];
 
   home = {
