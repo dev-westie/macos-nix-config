@@ -5,6 +5,7 @@
     ./git.nix
     ./aria2.nix
     ./zoxide.nix
+    ./zsh.nix
   ];
 
   home = {
