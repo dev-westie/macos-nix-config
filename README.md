@@ -1,14 +1,14 @@
 # nix-config
 
 macOS system config for `MacBook` using nix-darwin + home-manager + declarative
-Homebrew. Single machine, single user (`westie`), rebuilt from scratch periodically.
+Homebrew. Single machine, single user (`westie`).
 
 ## Stack
 
 - **nix-darwin**: macOS settings, defaults, activation scripts
-- **home-manager**: user-level packages and git config
-- **Homebrew** (via `nix-homebrew`): GUI apps (casks) and CLI tools not cleanly
-  packaged in nixpkgs (`mole`)
+- **home-manager**: user-level packages and pkg configs
+- **Homebrew** (`nix-homebrew`): GUI apps (casks) and CLI tools not cleanly
+  packaged in nixpkg 
 - **nixpkgs-unstable** as the package source
 
 Rule of thumb: CLI tools go in `home/packages.nix`. GUI apps go in
@@ -27,18 +27,16 @@ Rule of thumb: CLI tools go in `home/packages.nix`. GUI apps go in
     ├── home/
     │   ├── default.nix
     │   ├── git.nix
-    │   ├── packages.nix
-    │   └── aria2.nix
+    │   ├── packages.nix       cli pkgs
+    │   ├── aria2.nix
+    │   ├── zoxide.nix
+    │   └── zsh.nix 
     └── scripts/
         └── bootstrap          first-time setup on a fresh Mac
 
 ## Everyday commands
 
-Always edit the config and run `just switch`, even for a single package. Nix only
-rebuilds what changed. Installing things by hand (`brew install`, `nix profile
-install`) puts software on the machine that the config does not know about, and
-`zap` cleanup can later delete it. New files must be `git add`ed before building
-(flakes ignore untracked files).
+New files must be `git add`ed before building
 
 | Recipe | What it does | Manual equivalent |
 |---|---|---|
@@ -62,14 +60,13 @@ install`) puts software on the machine that the config does not know about, and
 **This deletes every old generation, with no 14-day window.** After `just clean`
 you can only roll back to the current generation. There is no scheduled GC in
 this config, so `just clean` is the only thing that reclaims space.
+## Edit
 
 ## First-time setup on a freshly reset Mac
 
 1. Run `xcode-select --install`
 2. Clone: `git clone https://github.com/dev-westie/macos-nix-config.git ~/.config/nix`
 3. `cd ~/.config/nix && ./scripts/bootstrap`
-
-`just` is installed by the config, so the first apply uses the bootstrap script.
 
 ## Deliberate choices
 
@@ -82,13 +79,10 @@ this config, so `just clean` is the only thing that reclaims space.
   `LSQuarantine` is also off.
 - **Homebrew `cleanup = "zap"`**: removing a cask also deletes its app data.
 - **Homebrew upgrades are never automatic.** Use `just brew-upgrade`.
-- **Keyboard shortcuts** are not managed. macOS defaults apply.
 - **Nix** is managed by the Determinate installer (`nix.enable = false`).
 - Rosetta 2 installs on the first rebuild (skipped if already present).
-- Touch ID for sudo is enabled.
-- Shell/terminal config is not managed. `zoxide`, `fzf`, `bat`, `eza` and `yazi`
-  are installed but need shell init added later.
-- LibreWolf settings are not managed declaratively.
+- working on `zoxide✔️`, `fzf`, `bat`, `eza` and `yazi`
+- LibreWolf settings are not managed declaratively. #Setup
 
 ## Adding software
 
@@ -102,4 +96,3 @@ Then run `just switch`.
 
 From the commits: "Initial working config" `4f6e2b55ca7fb58a83aaf4ad891c02636f187338` to "Overhaul: settings, Justfile, README" `75b5c46d7487d3d633fea99015eed3837b80e32e` was almost entirely vibecoded with AI.
 Starting with the commit "add aria2 config" `caab48319177dda07e9d8312821aa373c8ad00d8`, I will be coding things myself and only using AI to learn, help, explain things, or review/debug when I am stuck or need help.
-
