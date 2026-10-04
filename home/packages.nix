@@ -31,8 +31,5 @@
     flac
     yt-dlp
     aria2
-
-    # Apps
-    qbittorrent
   ];
 }
