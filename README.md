@@ -80,7 +80,6 @@ this config, so `just clean` is the only thing that reclaims space.
 - **Homebrew `cleanup = "zap"`**: removing a cask also deletes its app data.
 - **Homebrew upgrades are never automatic.** Use `just brew-upgrade`.
 - **Nix** is managed by the Determinate installer (`nix.enable = false`).
-- Rosetta 2 installs on the first rebuild (skipped if already present).
 - working on `zoxide✔️`, `fzf`, `bat`, `eza` and `yazi`
 - LibreWolf settings are not managed declaratively. #Setup
 

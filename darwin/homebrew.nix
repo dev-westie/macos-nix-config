@@ -23,6 +23,7 @@
       "iina"
       "prismlauncher"
       "crmne/tap/spotifast"
+      "netnewswire"
     ];
 
     brews = [
