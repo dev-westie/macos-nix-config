@@ -3,6 +3,7 @@
   imports = [
     ./packages.nix
     ./git.nix
+    ./aria2.nix
   ];
 
   home = {

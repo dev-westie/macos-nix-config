@@ -8,6 +8,7 @@
     # Terminal Utilities
     curl
     neovim
+    helix
     tree
     zoxide
     eza
