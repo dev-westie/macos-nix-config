@@ -11,7 +11,6 @@
 
     casks = [
       "ghostty"
-      "librewolf"
       "maccy"
       "protonvpn"
       "raycast"
@@ -24,6 +23,7 @@
       "prismlauncher"
       "crmne/tap/spotifast"
       "netnewswire"
+      "librewolf"
     ];
 
     brews = [

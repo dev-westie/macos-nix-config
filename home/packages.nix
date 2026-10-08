@@ -31,5 +31,8 @@
     flac
     yt-dlp
     aria2
+
+    # nixpkg only apps
+    ayugram-desktop
   ];
 }
