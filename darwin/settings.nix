@@ -35,8 +35,6 @@
         QuitMenuItem = true; # Cmd+Q quits Finder
       };
 
-      trackpad.Clicking = true; # tap to click
-
       NSGlobalDomain = {
         NSAutomaticSpellingCorrectionEnabled = false;
         NSAutomaticCapitalizationEnabled = false;
@@ -45,6 +43,11 @@
         KeyRepeat = 2; # fast key repeat
         InitialKeyRepeat = 15; # short delay before repeat
         "com.apple.trackpad.scaling" = 0.4;
+      };
+
+      universalaccess = {
+        reduceMotion = true;
+        reduceTransparency = true;
       };
 
       LaunchServices.LSQuarantine = false; # skip "downloaded from internet" prompts

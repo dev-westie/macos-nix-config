@@ -24,6 +24,7 @@
     nodejs
     rustc
     cargo
+    cmake
 
     # Media, Audio & Metadata Tools
     exiftool

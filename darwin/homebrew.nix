@@ -18,7 +18,6 @@
       "legcord"
       "roblox"
       "shottr"
-      "steam"
       "iina"
       "prismlauncher"
       "crmne/tap/spotifast"
