@@ -20,13 +20,18 @@
       "shottr"
       "iina"
       "prismlauncher"
-      "crmne/tap/spotifast"
       "netnewswire"
       "librewolf"
+      "spotify"
+      "tor-browser"
+      "helium-browser"
+      "obsidian"
+      "crmne/tap/spotifast"
     ];
 
     brews = [
       "mole"
+#     "ghidra"
     ];
 
     taps = [
