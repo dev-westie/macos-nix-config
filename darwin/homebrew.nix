@@ -26,12 +26,13 @@
       "tor-browser"
       "helium-browser"
       "obsidian"
+      "photocraft"
       "crmne/tap/spotifast"
     ];
 
     brews = [
       "mole"
-#     "ghidra"
+      #     "ghidra"
     ];
 
     taps = [

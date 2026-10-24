@@ -7,29 +7,26 @@
 
     # Terminal Utilities
     curl
-    neovim
     helix
-    tree
+    vis
     zoxide
     eza
     fd
     fzf
     ripgrep
-    yazi
     bat
+    neovim
+    tree
+    #   ollama
 
     # Programming Languages & Toolchains
     python3
-    uv
-    nodejs
-    rustc
-    cargo
     cmake
+    jdk21
 
     # Media, Audio & Metadata Tools
     exiftool
     ffmpeg
-    flac
     yt-dlp
     aria2
 

@@ -6,11 +6,10 @@ host := "MacBook"
 default:
     @just --list --unsorted
 
-# apply the config to the live system
 switch:
     sudo darwin-rebuild switch --flake .#{{ host }}
 
-# build only: validates everything, changes nothing, needs no root
+# build only
 test:
     darwin-rebuild build --flake .#{{ host }}
     rm -f result
@@ -32,27 +31,22 @@ update:
         echo "Skipped. flake.lock restored."
     fi
 
-# upgrade Homebrew formulae and casks (the only place brew upgrades happen)
 brew-upgrade:
     brew update
     brew upgrade
 
-# list saved system generations
 generations:
     darwin-rebuild --list-generations
 
-# go back to the previous generation
 rollback:
     sudo darwin-rebuild switch --rollback
 
-# format all .nix files
 fmt:
     nix fmt
 
-# full maintenance: delete ALL old generations, dedupe store, clean Homebrew
 clean:
-    sudo nix-collect-garbage -d
-    nix-collect-garbage -d
+    sudo nix-collect-garbage --delete-older-than 7d
+    nix-collect-garbage --delete-older-than 7d
     nix store optimise
     brew autoremove
     brew cleanup --prune=all

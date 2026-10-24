@@ -1,6 +1,8 @@
 { self, ... }:
 {
-  # Enable Touch ID for sudo authentication
+
+  networking.hostName = "NacBook";
+
   security.pam.services.sudo_local.touchIdAuth = true;
 
   system = {
@@ -17,7 +19,7 @@
       dock = {
         autohide = true;
         autohide-delay = 0.0;
-        autohide-time-modifier = 0.0; # Fixed with hyphen!
+        autohide-time-modifier = 0.0;
         show-recents = false;
         tilesize = 45;
         persistent-apps = [ ];
@@ -45,29 +47,17 @@
         "com.apple.trackpad.scaling" = 0.4;
       };
 
+      menuExtraClock = {
+        FlashDateSeparators = false;
+        Show24Hour = true;
+        ShowAMPM = false;
+        ShowSeconds = true;
+        ShowDayOfWeek = true;
+        ShowDayOfMonth = true;
+      };
+
       universalaccess.reduceMotion = true;
       LaunchServices.LSQuarantine = false;
     };
   };
-
-  # Activation script (runs automatically on switch)
-  system.activationScripts.postActivation.text = ''
-    # Disable Gatekeeper
-    if /usr/sbin/spctl --status | grep -q "assessments enabled"; then
-      /usr/sbin/spctl --master-disable || true
-    fi
-
-    # Configure background security updates only (no forced OS upgrades)
-    SU=/Library/Preferences/com.apple.SoftwareUpdate
-    /usr/bin/defaults write "$SU" AutomaticCheckEnabled -bool true
-    /usr/bin/defaults write "$SU" CriticalUpdateInstall -bool true
-    /usr/bin/defaults write "$SU" ConfigDataInstall -bool true
-    /usr/bin/defaults write "$SU" AutomaticallyInstallMacOSUpdates -bool false
-    /usr/bin/defaults write "$SU" AutomaticDownload -bool false
-
-    # Install Rosetta 2 on Apple Silicon Macs if missing
-    if ! /usr/bin/pgrep -q oahd; then
-      /usr/sbin/softwareupdate --install-rosetta --agree-to-license || true
-    fi
-  '';
 }
