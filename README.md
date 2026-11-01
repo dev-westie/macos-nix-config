@@ -1,42 +1,32 @@
 # nix-config
 
-macOS system config for `MacBook` using nix-darwin + home-manager + declarative
-Homebrew. Single machine, single user (`westie`).
+macOS system config for `MacBook` using nix-darwin + home-manager + nix-homebrew
 
 ## Stack
 
-- **nix-darwin**: macOS settings, defaults, activation scripts
-- **home-manager**: user-level packages and pkg configs
-- **Homebrew** (`nix-homebrew`): GUI apps (casks) and CLI tools not cleanly
-  packaged in nixpkg 
-- **nixpkgs-unstable** as the package source
-
-Rule of thumb: CLI tools go in `home/packages.nix`. GUI apps go in
-`darwin/homebrew.nix` as casks.
+- **nix-darwin**
+- **home-manager**
+- **Nix-Homebrew**
+- **nixpkgs-unstable**
 
 ## Layout
 
     .
-    ├── flake.nix              inputs, darwinConfigurations, formatter
+    ├── flake.nix              inputs
     ├── flake.lock
-    ├── Justfile               everyday commands (run `just`)
+    ├── Justfile               Just Comands 
     ├── darwin/
-    │   ├── default.nix        top-level darwin config, home-manager wiring
-    │   ├── settings.nix       macOS defaults, Software Update, Gatekeeper, Rosetta
-    │   └── homebrew.nix       casks + brews + taps
+    │   ├── default.nix        Top-level darwin config, home-manager wiring
+    │   ├── settings.nix       macOS defaults
+    │   └── homebrew.nix       Homebrew managment 
     ├── home/
     │   ├── default.nix
-    │   ├── git.nix
-    │   ├── packages.nix       cli pkgs
-    │   ├── aria2.nix
-    │   ├── zoxide.nix
-    │   └── zsh.nix 
+    │   ├── packages.nix       Cli pkgs
+    │   └── (...).nix          Other .nix configs 
     └── scripts/
-        └── bootstrap          first-time setup on a fresh Mac
+        └── bootstrap          First-time setup
 
-## Everyday commands
-
-New files must be `git add`ed before building
+## Just commands
 
 | Recipe | What it does | Manual equivalent |
 |---|---|---|
@@ -51,18 +41,13 @@ New files must be `git add`ed before building
 
 ### `just clean`
 
-    sudo nix-collect-garbage -d     # system generations + unreferenced store paths
-    nix-collect-garbage -d          # your user profiles
-    nix store optimise              # deduplicate the store
-    brew autoremove                 # orphaned dependencies
-    brew cleanup --prune=all        # old downloads and versions
+    sudo nix-collect-garbage -d
+    nix-collect-garbage -d
+    nix store optimise
+    brew autoremove
+    brew cleanup --prune=all
 
-**This deletes every old generation, with no 14-day window.** After `just clean`
-you can only roll back to the current generation. There is no scheduled GC in
-this config, so `just clean` is the only thing that reclaims space.
-## Edit
-
-## First-time setup on a freshly reset Mac
+## First-time setup
 
 1. Run `xcode-select --install`
 2. Clone: `git clone https://github.com/dev-westie/macos-nix-config.git ~/.config/nix`
@@ -70,26 +55,13 @@ this config, so `just clean` is the only thing that reclaims space.
 
 ## Deliberate choices
 
-- **Software Update** (written by an activation script into the system domain): macOS version upgrades are manual, with
-  no auto-download or auto-install. Security data (XProtect, Security Responses)
-  and system files install automatically. Command Line Tools updates are handled
-  by hand: `softwareupdate --list`, then `sudo softwareupdate --install "<name>"`.
 - **Gatekeeper** is fully disabled system-wide. Activation runs
   `spctl --master-disable` only when it is currently enabled.
   `LSQuarantine` is also off.
-- **Homebrew `cleanup = "zap"`**: removing a cask also deletes its app data.
-- **Homebrew upgrades are never automatic.** Use `just brew-upgrade`.
+- **Homebrew `cleanup = "zap"`**:
+- **Homebrew upgrades are never automatic.**
 - **Nix** is managed by the Determinate installer (`nix.enable = false`).
-- working on `zoxide✔️`, `fzf`, `bat`, `eza` and `yazi`
 - LibreWolf settings are not managed declaratively. #Setup
-
-## Adding software
-
-- **GUI app**: add to `casks` in `darwin/homebrew.nix` (`brew search --cask <name>`)
-- **CLI tool in nixpkgs (preferred)**: add to `home/packages.nix`
-- **CLI tool not in nixpkgs**: add to `brews` in `darwin/homebrew.nix`
-
-Then run `just switch`.
 
 ## AI Note
 

@@ -11,7 +11,7 @@
       max-connection-per-server = "16";
       split = "16";
 
-      seed-ratio = "1.0";
+      seed-ratio = "1.5";
     };
   };
 }

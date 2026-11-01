@@ -5,8 +5,8 @@
 
     onActivation = {
       autoUpdate = false;
-      upgrade = false; # upgrades happen only via `just brew-upgrade`
-      cleanup = "zap"; # intentional: removing a cask also deletes its leftover data
+      upgrade = false;
+      cleanup = "zap";
     };
 
     casks = [
@@ -20,19 +20,15 @@
       "shottr"
       "iina"
       "prismlauncher"
-      "netnewswire"
       "librewolf"
-      "spotify"
-      "tor-browser"
-      "helium-browser"
-      "obsidian"
-      "photocraft"
+      #"photocraft"
+      "spotifast"
       "crmne/tap/spotifast"
     ];
 
     brews = [
       "mole"
-      #     "ghidra"
+      #"ghidra"
     ];
 
     taps = [

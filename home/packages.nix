@@ -7,7 +7,6 @@
 
     # Terminal Utilities
     curl
-    helix
     vis
     zoxide
     eza
@@ -17,12 +16,11 @@
     bat
     neovim
     tree
-    #   ollama
+    #ollama
 
     # Programming Languages & Toolchains
     python3
     cmake
-    jdk21
 
     # Media, Audio & Metadata Tools
     exiftool
@@ -31,6 +29,6 @@
     aria2
 
     # nixpkg only apps
-    ayugram-desktop
+    #ayugram-desktop
   ];
 }

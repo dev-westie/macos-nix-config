@@ -2,18 +2,14 @@
   description = "My system configuration";
 
   inputs = {
-    # monorepo w/ recipes ("derivations")
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
 
-    # manages user-level config
     home-manager.url = "github:nix-community/home-manager/master";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
-    # system-level software and settings (macOS)
     darwin.url = "github:lnl7/nix-darwin";
     darwin.inputs.nixpkgs.follows = "nixpkgs";
 
-    # declarative homebrew management
     nix-homebrew.url = "github:zhaofengli/nix-homebrew";
   };
 
@@ -25,7 +21,7 @@
       ...
     }@inputs:
     let
-      # change your macOS user account name here
+      # Change User Here
       primaryUser = "westie";
     in
     {
