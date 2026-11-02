@@ -12,7 +12,6 @@
     fd
     fzf
     ripgrep
-    bat
     tree
     #ollama
 

@@ -14,7 +14,6 @@ fi
 echo "==> Checking for Full Disk Access..."
 if ! sqlite3 /Library/Application\ Support/com.apple.TCC/TCC.db "SELECT 1;" &>/dev/null; then
   echo "!! Full Disk Access not detected for terminal."
-  echo "   macOS requires Full Disk Access to write system defaults."
   echo "   Enable it in System Settings then re-run this script."
   exit 1
 fi

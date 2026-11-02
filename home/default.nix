@@ -7,6 +7,7 @@
     ./zoxide.nix
     ./zsh.nix
     ./nixvim.nix
+    ./bat.nix
   ];
 
   home = {

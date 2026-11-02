@@ -12,6 +12,7 @@
 
   system.primaryUser = primaryUser;
 
+  # Change to Module?
   nix-homebrew = {
     enable = true;
     user = primaryUser;
