@@ -7,7 +7,6 @@
 
     # Terminal Utilities
     curl
-    vis
     zoxide
     eza
     fd

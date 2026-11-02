@@ -16,18 +16,19 @@
       "raycast"
       "whatsapp"
       "legcord"
-      "roblox"
+      #"roblox"
       "shottr"
       "iina"
-      "prismlauncher"
+      #"prismlauncher"
       "librewolf"
       "photocraft"
       "spotifast"
-      "keepassxc"
+      #"keepassxc"
     ];
 
     brews = [
       "mole"
+      #"xcodegen"
       #"ghidra"
     ];
 
