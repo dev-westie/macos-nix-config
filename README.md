@@ -23,8 +23,7 @@ macOS system config for `MacBook` using nix-darwin + home-manager + nix-homebrew
     │   ├── default.nix
     │   ├── packages.nix       Cli pkgs
     │   └── (...).nix          Other .nix configs 
-    └── scripts/
-        └── bootstrap          First-time setup
+    └── bootstrap              Setup Script
 
 ## Just commands
 
@@ -41,17 +40,18 @@ macOS system config for `MacBook` using nix-darwin + home-manager + nix-homebrew
 
 ### `just clean`
 
-    sudo nix-collect-garbage -d
-    nix-collect-garbage -d
+    sudo nix-collect-garbage --delete-older-than 7d 
+    nix-collect-garbage --delete-older-than 7d
     nix store optimise
     brew autoremove
     brew cleanup --prune=all
 
 ## First-time setup
 
-1. Run `xcode-select --install`
-2. Clone: `git clone https://github.com/dev-westie/macos-nix-config.git ~/.config/nix`
-3. `cd ~/.config/nix && ./scripts/bootstrap`
+1. Ensure fulldisk acsess is enabled for the termnial 
+2. Run `xcode-select --install`
+3. Clone: `git clone https://github.com/dev-westie/macos-nix-config.git ~/.config/nix`
+4. Run the bootstrap script: `cd ~/.config/nix && ./scripts/bootstrap`
 
 ## Deliberate choices
 

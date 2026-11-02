@@ -14,7 +14,6 @@
     fzf
     ripgrep
     bat
-    neovim
     tree
     #ollama
 

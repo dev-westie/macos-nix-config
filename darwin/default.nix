@@ -10,20 +10,22 @@
   # Nix is managed by the Determinate installer, not nix-darwin.
   nix.enable = false;
 
-  # Which account is "the" user of this machine.
   system.primaryUser = primaryUser;
 
   nix-homebrew = {
     enable = true;
     user = primaryUser;
-    autoMigrate = true; # adopts a pre-existing Homebrew install; harmless otherwise
+    autoMigrate = true;
   };
 
   home-manager = {
     useGlobalPkgs = true;
     useUserPackages = true;
-    backupFileExtension = "backup"; # existing files get renamed instead of failing
-    users.${primaryUser}.imports = [ ../home ];
+    backupFileExtension = "backup";
+    users.${primaryUser}.imports = [
+      ../home
+      inputs.nixvim.homeModules.nixvim
+    ];
     extraSpecialArgs = { inherit primaryUser; };
   };
 

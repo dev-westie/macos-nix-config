@@ -6,6 +6,7 @@
     ./aria2.nix
     ./zoxide.nix
     ./zsh.nix
+    ./nixvim.nix
   ];
 
   home = {

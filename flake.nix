@@ -1,6 +1,4 @@
 {
-  description = "My system configuration";
-
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
 
@@ -11,6 +9,8 @@
     darwin.inputs.nixpkgs.follows = "nixpkgs";
 
     nix-homebrew.url = "github:zhaofengli/nix-homebrew";
+
+    nixvim.url = "github:nix-community/nixvim";
   };
 
   outputs =

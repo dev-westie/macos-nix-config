@@ -10,7 +10,7 @@ switch:
     sudo darwin-rebuild switch --flake .#{{ host }}
 
 # build only
-test:
+build:
     darwin-rebuild build --flake .#{{ host }}
     rm -f result
 

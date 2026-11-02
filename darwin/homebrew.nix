@@ -21,9 +21,9 @@
       "iina"
       "prismlauncher"
       "librewolf"
-      #"photocraft"
+      "photocraft"
       "spotifast"
-      "crmne/tap/spotifast"
+      "keepassxc"
     ];
 
     brews = [

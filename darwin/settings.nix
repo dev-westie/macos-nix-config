@@ -1,7 +1,7 @@
 { self, ... }:
 {
 
-  networking.hostName = "NacBook";
+  networking.hostName = "MacBook";
 
   security.pam.services.sudo_local.touchIdAuth = true;
 
@@ -37,13 +37,13 @@
       };
 
       NSGlobalDomain = {
-        _HIHideMenuBar = true; # Auto-hide top menu bar
+        _HIHideMenuBar = true;
         NSAutomaticSpellingCorrectionEnabled = true;
         NSAutomaticCapitalizationEnabled = true;
         NSAutomaticPeriodSubstitutionEnabled = false;
         NSAutomaticWindowAnimationsEnabled = false;
         KeyRepeat = 2;
-        InitialKeyRepeat = 15;
+        InitialKeyRepeat = 20;
         "com.apple.trackpad.scaling" = 0.4;
       };
 

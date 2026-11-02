@@ -1,9 +1,8 @@
 #!/bin/bash
 # First-time setup on a fresh Mac. The repo must already be cloned to
-# ~/.config/nix (private repo, so that step needs your own auth). See README.md.
 set -euo pipefail
 
-cd "$(dirname "${BASH_SOURCE[0]}")/.."
+cd "$(dirname "${BASH_SOURCE[0]}")"
 
 echo "==> Checking for Xcode Command Line Tools..."
 if ! xcode-select -p >/dev/null 2>&1; then
@@ -11,6 +10,15 @@ if ! xcode-select -p >/dev/null 2>&1; then
   echo "   Run 'xcode-select --install', finish the popup, then re-run this script."
   exit 1
 fi
+
+echo "==> Checking for Full Disk Access..."
+if ! sqlite3 /Library/Application\ Support/com.apple.TCC/TCC.db "SELECT 1;" &>/dev/null; then
+  echo "!! Full Disk Access not detected for terminal."
+  echo "   macOS requires Full Disk Access to write system defaults."
+  echo "   Enable it in System Settings then re-run this script."
+  exit 1
+fi
+
 
 echo "==> Checking for Nix..."
 if ! command -v nix >/dev/null 2>&1; then
