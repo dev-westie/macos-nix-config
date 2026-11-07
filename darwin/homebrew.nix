@@ -1,5 +1,11 @@
-{ ... }:
+{ primaryUser, ... }:
 {
+  nix-homebrew = {
+    enable = true;
+    user = primaryUser;
+    autoMigrate = true;
+  };
+
   homebrew = {
     enable = true;
 
@@ -10,6 +16,7 @@
     };
 
     casks = [
+      "claude"
       "ghostty"
       "maccy"
       "protonvpn"
@@ -28,6 +35,7 @@
 
     brews = [
       "mole"
+      "opencode"
       #"xcodegen"
       #"ghidra"
     ];

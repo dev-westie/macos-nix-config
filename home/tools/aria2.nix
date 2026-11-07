@@ -1,10 +1,10 @@
-{ ... }:
+{ config, ... }:
 {
   programs.aria2 = {
     enable = true;
 
     settings = {
-      dir = "/Users/westie/Downloads";
+      dir = "${config.home.homeDirectory}/Downloads";
       continue = true;
       file-allocation = "none";
 

@@ -1,9 +1,6 @@
 # nix-config
 
-macOS system config for `MacBook` using nix-darwin + home-manager + nix-homebrew
-
 ## Stack
-
 - **nix-darwin**
 - **home-manager**
 - **Nix-Homebrew**
@@ -12,56 +9,68 @@ macOS system config for `MacBook` using nix-darwin + home-manager + nix-homebrew
 ## Layout
 
     .
-    ├── flake.nix              inputs
+    ├── README.md
+    ├── TODO.md
+    ├── flake.nix
     ├── flake.lock
-    ├── Justfile               Just Comands 
+    ├── Justfile
+    ├── bootstrap              Setup script
     ├── darwin/
-    │   ├── default.nix        Top-level darwin config, home-manager wiring
+    │   ├── default.nix        Module wiring
     │   ├── settings.nix       macOS defaults
-    │   └── homebrew.nix       Homebrew managment 
-    ├── home/
-    │   ├── default.nix
-    │   ├── packages.nix       Cli pkgs
-    │   └── (...).nix          Other .nix configs 
-    └── bootstrap              Setup Script
+    │   └── homebrew.nix       Homebrew + nix-homebrew
+    └── home/
+        ├── default.nix
+        ├── packages.nix       CLI packages
+        ├── aria2.nix
+        ├── bat.nix
+        ├── git.nix
+        ├── nixvim.nix
+        ├── zoxide.nix
+        └── zsh.nix
 
 ## Just commands
 
 | Recipe | What it does | Manual equivalent |
 |---|---|---|
 | `just switch` | Apply the config | `sudo darwin-rebuild switch --flake .#MacBook` |
-| `just test` | Build only. Validates without changing anything | `darwin-rebuild build --flake .#MacBook` |
+| `just build` | Build only. Validates without changing anything | `darwin-rebuild build --flake .#MacBook` |
 | `just update` | Update inputs, build, confirm, switch. Restores `flake.lock` on failure or "no" | `nix flake update`, then build, then switch |
-| `just brew-upgrade` | Upgrade Homebrew apps. The only place brew upgrades happen | `brew update && brew upgrade` |
-| `just generations` | List saved system generations | `darwin-rebuild --list-generations` |
+| `just brew-upgrade` | Upgrade Homebrew formulae and casks. The only place brew upgrades happen | `brew upgrade && brew upgrade --cask` |
+| `just generations` | List saved system generations | `sudo darwin-rebuild --list-generations` |
 | `just rollback` | Go back one generation | `sudo darwin-rebuild switch --rollback` |
 | `just fmt` | Format all `.nix` files | `nix fmt` |
-| `just clean` | Full maintenance (below) | see below |
+| `just check` | Evaluate the flake and run checks | `nix flake check` |
+| `just changelog` | Show nix-darwin release notes | `darwin-rebuild changelog --flake .#MacBook` |
+| `just clean` | Full maintenance | see below |
+
+`nixcfg` is a shell alias for `just --justfile ~/.config/nix/Justfile`, so every recipe works from any directory.
 
 ### `just clean`
 
-    sudo nix-collect-garbage --delete-older-than 7d 
-    nix-collect-garbage --delete-older-than 7d
+    sudo nix-collect-garbage --delete-older-than 7d
     nix store optimise
     brew autoremove
     brew cleanup --prune=all
 
+Determinate Nix already runs automatic garbage collection in the background;
+this recipe only trims old system generations and Homebrew leftovers.
+
 ## First-time setup
 
-1. Ensure fulldisk acsess is enabled for the termnial 
-2. Run `xcode-select --install`
+1. Ensure Full Disk Access is enabled for the terminal.
+2. Run `xcode-select --install`.
 3. Clone: `git clone https://github.com/dev-westie/macos-nix-config.git ~/.config/nix`
-4. Run the bootstrap script: `cd ~/.config/nix && ./scripts/bootstrap`
+4. Run the bootstrap script: `cd ~/.config/nix && ./bootstrap`
 
 ## Deliberate choices
 
-- **Gatekeeper** is fully disabled system-wide. Activation runs
-  `spctl --master-disable` only when it is currently enabled.
-  `LSQuarantine` is also off.
-- **Homebrew `cleanup = "zap"`**:
-- **Homebrew upgrades are never automatic.**
+- **Homebrew `cleanup = "zap"`**: activation removes any Homebrew formula or cask not listed in `darwin/homebrew.nix`, so the config is the single source of truth.
+- **Homebrew upgrades are manual**: `onActivation.autoUpdate` and `upgrade` are off; use `just brew-upgrade` instead.
+- **Homebrew is pinned by nix-homebrew**: `brew update` cannot update Homebrew itself because the Homebrew code lives in the Nix store.
+- **Gatekeeper quarantine is off**: `LaunchServices.LSQuarantine = false` means downloaded files are not quarantined. This weakens Gatekeeper; remove the setting if you want the default protection.
 - **Nix** is managed by the Determinate installer (`nix.enable = false`).
-- LibreWolf settings are not managed declaratively. #Setup
+- **LibreWolf** is installed via Homebrew and its settings are not managed declaratively.
 
 ## AI Note
 

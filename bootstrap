@@ -1,5 +1,5 @@
 #!/bin/bash
-# First-time setup on a fresh Mac. The repo must already be cloned to
+# First-time setup on a fresh Mac. The repo must already be cloned to ~/.config/nix.
 set -euo pipefail
 
 cd "$(dirname "${BASH_SOURCE[0]}")"
@@ -12,7 +12,7 @@ if ! xcode-select -p >/dev/null 2>&1; then
 fi
 
 echo "==> Checking for Full Disk Access..."
-if ! sqlite3 /Library/Application\ Support/com.apple.TCC/TCC.db "SELECT 1;" &>/dev/null; then
+if ! sqlite3 "/Library/Application Support/com.apple.TCC/TCC.db" "SELECT 1;" &>/dev/null; then
   echo "!! Full Disk Access not detected for terminal."
   echo "   Enable it in System Settings then re-run this script."
   exit 1
@@ -35,7 +35,7 @@ if command -v darwin-rebuild >/dev/null 2>&1; then
   sudo darwin-rebuild switch --flake .#MacBook
 else
   # darwin-rebuild doesn't exist until nix-darwin has been applied once.
-  sudo nix run github:lnl7/nix-darwin#darwin-rebuild -- switch --flake .#MacBook
+  sudo nix run github:nix-darwin/nix-darwin/master#darwin-rebuild -- switch --flake .#MacBook
 fi
 
 echo "==> Done. Open a new terminal to pick up all changes."

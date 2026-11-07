@@ -12,9 +12,14 @@
 
   home = {
     username = primaryUser;
-    stateVersion = "25.05";
+    stateVersion = "26.05";
 
     # Suppress the "last login" message in new terminal windows
     file.".hushlogin".text = "";
+  };
+
+  home.sessionVariables = {
+    EDITOR = "nvim";
+    VISUAL = "nvim";
   };
 }

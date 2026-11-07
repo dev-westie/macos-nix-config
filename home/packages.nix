@@ -7,7 +7,6 @@
 
     # Terminal Utilities
     curl
-    zoxide
     eza
     fd
     fzf
@@ -23,7 +22,6 @@
     exiftool
     ffmpeg
     yt-dlp
-    aria2
 
     # nixpkg only apps
     #ayugram-desktop

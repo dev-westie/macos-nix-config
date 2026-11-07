@@ -5,7 +5,7 @@
     home-manager.url = "github:nix-community/home-manager/master";
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
 
-    darwin.url = "github:lnl7/nix-darwin";
+    darwin.url = "github:nix-darwin/nix-darwin";
     darwin.inputs.nixpkgs.follows = "nixpkgs";
 
     nix-homebrew.url = "github:zhaofengli/nix-homebrew";
@@ -27,7 +27,6 @@
     {
       # sudo darwin-rebuild switch --flake .#MacBook   (or: just switch)
       darwinConfigurations.MacBook = darwin.lib.darwinSystem {
-        system = "aarch64-darwin";
         modules = [ ./darwin ];
         specialArgs = { inherit inputs self primaryUser; };
       };

@@ -8,12 +8,14 @@
 ### 🟠 Medium Priority
 - [ ] Try Fish
 - [ ] Try Starship
-- [ ] Edit bat.nix
+- [x] Edit bat.nix
+- [x] Resolve tap trust in homebrew.nix
 
 ### 🟢 Low Priority
-- [ ] Make Justfile work without being in .config/nix 
-- [ ] Update README.md
-- [ ] Configure termnial 
+- [x] Make Justfile work without being in .config/nix 
+- [x] Update README.md
+- [ ] Configure terminal 
+- [ ] LibreWolf module
 
 ### ⚪ Ideas
 - [ ] Glow,

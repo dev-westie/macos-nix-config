@@ -10,14 +10,9 @@
   # Nix is managed by the Determinate installer, not nix-darwin.
   nix.enable = false;
 
-  system.primaryUser = primaryUser;
+  nixpkgs.hostPlatform = "aarch64-darwin";
 
-  # Change to Module?
-  nix-homebrew = {
-    enable = true;
-    user = primaryUser;
-    autoMigrate = true;
-  };
+  system.primaryUser = primaryUser;
 
   home-manager = {
     useGlobalPkgs = true;
